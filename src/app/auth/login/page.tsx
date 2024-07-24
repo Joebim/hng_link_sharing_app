@@ -25,7 +25,6 @@ const Login: React.FC<Props> = () => {
       [name]: value,
     });
     setError("")
-    console.log('form', form)
   };
 
   const handleSubmit = async (e: FormEvent) => {

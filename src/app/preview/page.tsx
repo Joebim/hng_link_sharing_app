@@ -7,9 +7,9 @@ type Props = {}
 
 const Preview = (props: Props) => {
   return (
-    <div className="flex justify-center items-center min-h-[984px] py-[300px]">
+    <div className="flex justify-center items-center min-h-[750px] sm:min-h-[984px] py-[100px] sm:py-[300px]">
 
-      <div className="top-0 absolute p-[24px] z-[100] w-full">
+      <div className="top-0 absolute p-0 sm:p-[24px] z-[100] w-full">
         <div className='w-full rounded-[0px] sm:rounded-[12px] bg-white p-[16px] flex justify-between items-center font z-[100]'>
           <a href="/">
             <Button
@@ -34,7 +34,7 @@ const Preview = (props: Props) => {
       </div>
 
 
-      <div className="absolute top-0 h-[357px] w-full rounded-b-[32px] bg-primary-default"></div>
+      <div className="absolute top-0 h-[357px] w-full rounded-b-[32px] bg-primary-default hidden sm:block"></div>
 
 
 
