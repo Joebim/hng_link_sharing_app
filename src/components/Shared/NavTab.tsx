@@ -29,16 +29,20 @@ const NavTab: React.FC<NavTabProperties> = ({
 
   return (
     <div className='w-full rounded-[0px] sm:rounded-[12px] bg-white p-[16px] flex justify-between items-center font'>
-      <div className="flex gap-[10px] items-center">
-        <div className="w-[30px]">
-          <Logo
-            viewBox="0 0 34 34"
-            preserveAspectRatio="xMinYMin"
-            className="h-full w-full"
-          />
+
+      <a href="/auth/login">
+        <div className="flex gap-[10px] items-center">
+          <div className="w-[30px]">
+            <Logo
+              viewBox="0 0 34 34"
+              preserveAspectRatio="xMinYMin"
+              className="h-full w-full"
+            />
+          </div>
+          <h1 className="hidden sm:block font-bold text-[24px]">devlinks</h1>
         </div>
-        <h1 className="hidden sm:block font-bold text-[24px]">devlinks</h1>
-      </div>
+      </a>
+
       <div className="flex ">
         {navTabItems.map((navItem, id) => (
           <div

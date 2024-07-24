@@ -73,7 +73,7 @@ const CreateAccount = (props: Props) => {
               Login
             </Button>
             <div className=" flex justify-center items-center">
-              <p className="text-body-m text-dark flex flex-col items-center sm:block">Already have an account? <span className='text-primary-default'><a href="">Login</a></span></p>
+              <p className="text-body-m text-dark flex flex-col items-center sm:block">Already have an account? <span className='text-primary-default'><a href="/auth/login">Login</a></span></p>
             </div>
           </div>
 

@@ -24,10 +24,16 @@ const Login: React.FC<Props> = () => {
       ...form,
       [name]: value,
     });
+    setError("")
+    console.log('form', form)
   };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+
+    // if (!form.email || !form.password) {
+    //   setError("Can't be empty")
+    // }
     setError("");
 
     try {
@@ -79,17 +85,15 @@ const Login: React.FC<Props> = () => {
               <Button
                 type="submit"
                 variant="primary"
-                disabled={!form.email || !form.password}
+                disabled={false}
               >
                 Login
               </Button>
             </form>
 
-            {error && <p className="text-red-500 mt-4">{error}</p>}
-
             <div className="flex justify-center items-center">
               <p className="text-body-m text-dark flex flex-col items-center sm:block">
-                Don’t have an account? <span className='text-primary-default'><a href="">Create account</a></span>
+                Don’t have an account? <span className='text-primary-default'><a href="/auth/login">Create account</a></span>
               </p>
             </div>
           </div>
