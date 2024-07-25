@@ -24,7 +24,9 @@ const InputField: React.FC<Props> = ({ placeholder, Icon, onChange, error, label
                     {Icon && <Icon className="text-grey-500" />}
 
                     <input
+                        name={name}
                         type={type}
+                        value={value}
                         placeholder={placeholder}
                         onChange={onChange}
                         className="flex-1 outline-none text-body-m w-full"

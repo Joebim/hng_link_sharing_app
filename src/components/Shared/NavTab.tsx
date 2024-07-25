@@ -30,7 +30,7 @@ const NavTab: React.FC<NavTabProperties> = ({
   return (
     <div className='w-full rounded-[0px] sm:rounded-[12px] bg-white p-[16px] flex justify-between items-center font'>
 
-      <a href="/auth/login">
+      <a href="/">
         <div className="flex gap-[10px] items-center">
           <div className="w-[30px]">
             <Logo

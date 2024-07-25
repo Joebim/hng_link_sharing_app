@@ -1,15 +1,19 @@
+"use client"
+
 import MainLayout from "@/components/Layout/MainLayout";
-import { AuthProvider } from "@/utils/context/AuthContext";
+import { useAuth } from "@/utils/context/AuthContext";
+import withAuth from "@/utils/HOC/withAuth";
 
-export default function Home() {
+function Home() {
+  const currentUser = useAuth()
 
+  console.log('currentUser', currentUser)
 
   return (
     <main className="min-h-screen ">
-      <AuthProvider>
         <MainLayout />
-      </AuthProvider>
-
     </main>
   );
 }
+
+export default withAuth(Home);

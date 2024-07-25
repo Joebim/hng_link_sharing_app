@@ -1,6 +1,6 @@
 "use client"
 
-import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useEffect, useState, ReactNode, useRef } from 'react';
 import { auth } from '../firebase';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, User, UserCredential } from 'firebase/auth';
 
@@ -9,9 +9,10 @@ type AuthContextType = {
     signup: (email: string, password: string) => Promise<UserCredential>;
     signin: (email: string, password: string) => Promise<UserCredential>;
     logOut: () => Promise<void>;
+    isAuthenticated: boolean;
 };
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const AuthContext = createContext<AuthContextType | null>(null);
 
 export function useAuth() {
     const context = useContext(AuthContext);
@@ -28,6 +29,7 @@ type Props = {
 export const AuthProvider: React.FC<Props> = ({ children }) => {
     const [currentUser, setCurrentUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
+    const userInfo = useRef()
 
     const signup = (email: string, password: string) => {
         return createUserWithEmailAndPassword(auth, email, password);
@@ -50,11 +52,15 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
         return () => unsubscribe();
     }, []);
 
+    const isAuthenticated = !!currentUser; 
+
     const value = {
         currentUser,
         signup,
         signin,
         logOut,
+        isAuthenticated,
+        userInfo
     };
 
     return (

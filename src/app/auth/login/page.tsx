@@ -1,13 +1,13 @@
 "use client"
 
 import React, { useState, ChangeEvent, FormEvent } from 'react';
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from '@/utils/firebase';
 import Logo from "../../../../public/logo.svg";
 import InputField from '@/components/Shared/InputField';
 import Email from "../../../../public/email.svg";
 import Lock from "../../../../public/lock.svg";
 import Button from '@/components/Shared/Button';
+import { useAuth } from '@/utils/context/AuthContext';
+import { useRouter } from 'next/navigation';
 
 type Props = {};
 
@@ -16,7 +16,16 @@ const Login: React.FC<Props> = () => {
     email: "",
     password: "",
   });
-  const [error, setError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const { signin } = useAuth();
+
+  const router = useRouter()
+
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -24,23 +33,36 @@ const Login: React.FC<Props> = () => {
       ...form,
       [name]: value,
     });
-    setError("")
+
+    if (name === "email") setEmailError("");
+    if (name === "password") setPasswordError("");
   };
 
-  const handleSubmit = async (e: FormEvent) => {
+  const handleLogin = async (e: FormEvent) => {
     e.preventDefault();
 
-    // if (!form.email || !form.password) {
-    //   setError("Can't be empty")
-    // }
-    setError("");
+    // Validate email
+    if (!form.email) {
+      setEmailError("Email can't be empty");
+      return;
+    }
+    if (!validateEmail(form.email)) {
+      setEmailError("Invalid email format");
+      return;
+    }
+
+    if (!form.password) {
+      setPasswordError("Password can't be empty");
+      return;
+    }
 
     try {
-      await signInWithEmailAndPassword(auth, form.email, form.password);
-      console.log("Logged In");
-      // Redirect to another page or perform further actions after successful login
-    } catch (error: any) {
-      setError(error.message);
+      await signin(form.email, form.password);
+      console.log('Login successful');
+      router.push('/');
+    } catch (error) {
+      setEmailError("Incorrect email");
+      setPasswordError("Incorrect password");
     }
   };
 
@@ -58,12 +80,12 @@ const Login: React.FC<Props> = () => {
           </div>
 
           <div className="flex flex-col gap-[20px]">
-            <form className='flex flex-col gap-[20px]' onSubmit={handleSubmit}>
+            <form className='flex flex-col gap-[20px]' onSubmit={handleLogin}>
               <InputField
                 placeholder='Enter Your Email'
                 Icon={Email}
                 onChange={handleChange}
-                error={error}
+                error={emailError}
                 label='Email address'
                 inputType="text"
                 name="email"
@@ -74,7 +96,7 @@ const Login: React.FC<Props> = () => {
                 placeholder='Enter Your Password'
                 Icon={Lock}
                 onChange={handleChange}
-                error={error}
+                error={passwordError}
                 label='Password'
                 inputType="password"
                 name="password"
@@ -92,7 +114,7 @@ const Login: React.FC<Props> = () => {
 
             <div className="flex justify-center items-center">
               <p className="text-body-m text-dark flex flex-col items-center sm:block">
-                Don’t have an account? <span className='text-primary-default'><a href="/auth/login">Create account</a></span>
+                Don’t have an account? <span className='text-primary-default'><a href="/auth/createAccount">Create account</a></span>
               </p>
             </div>
           </div>

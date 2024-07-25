@@ -14,6 +14,10 @@ type Props = {
 const MainLayout: React.FC<Props> = () => {
     const [tab, setTab] = useState<string>("customize");
 
+    const currentUser = useAuth()
+
+    console.log('currentUser', currentUser)
+
     return (
         <div className="min-h-screen gap-[24px] p-0 sm:p-[24px] flex flex-col">
             <NavTab tab={tab} setTab={setTab} />

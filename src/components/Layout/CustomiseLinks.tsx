@@ -1,4 +1,6 @@
-import React from 'react'
+"use client"
+
+import React, { useState } from 'react'
 import Button from '../Shared/Button'
 import HandClickStart from "../../../public/hand-click-start.svg"
 import LinkCard from '../Shared/LinkCard'
@@ -7,6 +9,7 @@ type Props = {}
 
 const CustomiseLinks = (props: Props) => {
 
+    const [first, setfirst] = useState([])
 
     return (
         <div className='sm:p-0 p-[20px] '>
