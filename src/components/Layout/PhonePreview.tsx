@@ -37,7 +37,6 @@ const PhonePreview: React.FC<Props> = () => {
                         <div className="w-[237px] h-[44px] rounded-[8px] bg-[#eeeeee]"></div>
                         <div className="w-[237px] h-[44px] rounded-[8px] bg-[#eeeeee]"></div>
                         <div className="w-[237px] h-[44px] rounded-[8px] bg-[#eeeeee]"></div>
-                        <div className="w-[237px] h-[44px] rounded-[8px] bg-[#eeeeee]"></div>
                     </div>
                 ) : (
                     <div className="flex flex-col gap-[20px]">
