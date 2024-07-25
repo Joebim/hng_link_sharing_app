@@ -53,6 +53,8 @@ const Profile: React.FC<Props> = (props: Props) => {
     }
   };
 
+  console.log('currentUser.photoUrl', currentUser?.photoURL)
+
   return (
     <div className="sm:p-0 p-[20px] ">
       <div className="bg-white sm:bg-transparent rounded-t-[12px]">
@@ -68,7 +70,8 @@ const Profile: React.FC<Props> = (props: Props) => {
               <p className="text-body-m text-grey-300">Profile picture</p>
             </div>
             {currentUser?.photoURL ?
-              <div className="rounded-[12px] bg-dark w-[193px] h-[193px] bg-opacity-50 flex justify-center items-center">
+              <div className="rounded-[12px] bg-dark w-[193px] h-[193px] bg-opacity-50 flex justify-center bg-cover bg-center bg-no-repeat items-center"
+              style={{ backgroundImage: currentUser?.photoURL ? `url(${currentUser.photoURL})` : 'none' }}              >
                 <div className="flex flex-col items-center gap-[8px]">
                   <label htmlFor="image-upload" className="cursor-pointer flex flex-col items-center gap-[20px]">
                     <ImageIcon />

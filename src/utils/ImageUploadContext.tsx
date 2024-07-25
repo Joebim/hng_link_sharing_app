@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { auth, storage } from './firebase';
-import { deleteObject, getDownloadURL, ref, uploadBytesResumable, TaskState } from 'firebase/storage';
+import { getDownloadURL, ref, uploadBytesResumable, TaskState } from 'firebase/storage';
 import { updateProfile } from 'firebase/auth';
 
 type UploadState = {
@@ -40,7 +40,9 @@ export const ImageUploadProvider: React.FC<Props> = ({ children }) => {
     });
 
     const uploadImage = (file: File) => {
-        if (!auth.currentUser) {
+        const currentUser = auth.currentUser;
+
+        if (!currentUser) {
             setUploadStatus({
                 progress: null,
                 state: null,
@@ -50,7 +52,7 @@ export const ImageUploadProvider: React.FC<Props> = ({ children }) => {
             return;
         }
 
-        const uid = auth.currentUser.uid;
+        const uid = currentUser.uid;
 
         if (file.size >= 1 * 1024 * 1024) {
             setUploadStatus({
@@ -63,7 +65,7 @@ export const ImageUploadProvider: React.FC<Props> = ({ children }) => {
         }
 
         const uploadTask = uploadBytesResumable(
-            ref(storage, `profiles/${uid}/${file.name}`),
+            ref(storage, `images/${uid}/${file.name}`),
             file
         );
 
@@ -88,20 +90,32 @@ export const ImageUploadProvider: React.FC<Props> = ({ children }) => {
             () => {
                 getDownloadURL(uploadTask.snapshot.ref)
                     .then((downloadURL) => {
-                        deleteObject(ref(storage, `profiles/${uid}/${file.name}`)).then(() => {
-                            if (!auth.currentUser) {
-                                throw new Error('No User!');
-                            }
-                            updateProfile(auth.currentUser, {
-                                displayName: auth.currentUser.displayName,
-                                photoURL: downloadURL
-                            }).then(() => {
-                                setUploadStatus({
-                                    progress: 100,
-                                    state: 'success',
-                                    error: null,
-                                    downloadURL
-                                });
+                        if (!currentUser) {
+                            setUploadStatus({
+                                progress: null,
+                                state: 'error',
+                                error: 'User is not authenticated!',
+                                downloadURL: null
+                            });
+                            return;
+                        }
+
+                        updateProfile(currentUser, {
+                            displayName: currentUser.displayName,
+                            photoURL: downloadURL
+                        }).then(() => {
+                            setUploadStatus({
+                                progress: 100,
+                                state: 'success',
+                                error: null,
+                                downloadURL
+                            });
+                        }).catch((error) => {
+                            setUploadStatus({
+                                progress: null,
+                                state: 'error',
+                                error: error.message,
+                                downloadURL: null
                             });
                         });
                     });
