@@ -1,23 +1,25 @@
-"use client"
+"use client";
 
-import React, { createContext, useContext, useEffect, useState, ReactNode, useRef } from 'react';
+import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { auth } from '../firebase';
-import { updateProfile, updateEmail} from 'firebase/auth';
+import { updateProfile, updateEmail } from 'firebase/auth';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, User, UserCredential } from 'firebase/auth';
+import {  useImageUpload } from '../ImageUploadContext';
 
 type UserProfile = {
     email?: string;
     displayName?: string;
     photoURL?: string | null;
-  };
+};
 
-  type AuthContextType = {
+type AuthContextType = {
     currentUser: User | null;
     signup: (email: string, password: string) => Promise<UserCredential>;
     signin: (email: string, password: string) => Promise<UserCredential>;
     logOut: () => Promise<void>;
     isAuthenticated: boolean;
     updateUserProfile: (profile: UserProfile) => Promise<void>;
+    uploadImage: (file: File) => void;
 };
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -37,7 +39,7 @@ type Props = {
 export const AuthProvider: React.FC<Props> = ({ children }) => {
     const [currentUser, setCurrentUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
-    const userInfo = useRef()
+    const { uploadImage } = useImageUpload(); // Use the image upload function
 
     const signup = (email: string, password: string) => {
         return createUserWithEmailAndPassword(auth, email, password);
@@ -63,13 +65,12 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
             if (profile.email) {
               await updateEmail(currentUser, profile.email);
             }
-            // Update the state with the new user info
             setCurrentUser(auth.currentUser);
           } catch (error) {
             console.error("Error updating profile: ", error);
           }
         }
-      };
+    };
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -80,7 +81,7 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
         return () => unsubscribe();
     }, []);
 
-    const isAuthenticated = !!currentUser; 
+    const isAuthenticated = !!currentUser;
 
     const value = {
         currentUser,
@@ -88,13 +89,13 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
         signin,
         logOut,
         isAuthenticated,
-        userInfo,
-        updateUserProfile
+        updateUserProfile,
+        uploadImage, // Provide the uploadImage function
     };
 
     return (
         <AuthContext.Provider value={value}>
-            {!loading && children}
+                {!loading && children}
         </AuthContext.Provider>
     );
 };

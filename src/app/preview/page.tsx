@@ -1,11 +1,18 @@
 "use client"
 
 import Button from '@/components/Shared/Button'
+import { useAuth } from '@/utils/context/AuthContext'
+import { useLinkContext } from '@/utils/context/LinkContext'
 import React from 'react'
+import LinkListItem from '@/components/Shared/LinkListItem'
 
 type Props = {}
 
 const Preview = (props: Props) => {
+
+  const { links } = useLinkContext();
+  const { currentUser } = useAuth();
+
   return (
     <div className="flex justify-center items-center min-h-[750px] sm:min-h-[984px] py-[100px] sm:py-[300px]">
 
@@ -42,16 +49,22 @@ const Preview = (props: Props) => {
         <div className="flex flex-col items-center gap-[25px]">
           <div className="h-[96px] w-[96px] bg-[#eeeeee] rounded-full"></div>
           <div className="flex flex-col gap-[13px] items-center">
-            <h1 className="text-dark text-heading-m font-bold">Ben Wright</h1>
-            <p className="text-dark text-body-m">ben@example.com</p>
+            <h1 className="text-dark text-heading-m font-bold">{currentUser?.displayName}</h1>
+            <p className="text-dark text-body-m">{currentUser?.email}</p>
           </div>
         </div>
-        <div className="flex flex-col gap-[20px]">
+        {links.length == 0 ? <div className="flex flex-col gap-[20px]">
           <div className="w-[237px] h-[44px] rounded-[8px] bg-[#eeeeee]"></div>
           <div className="w-[237px] h-[44px] rounded-[8px] bg-[#eeeeee]"></div>
           <div className="w-[237px] h-[44px] rounded-[8px] bg-[#eeeeee]"></div>
           <div className="w-[237px] h-[44px] rounded-[8px] bg-[#eeeeee]"></div>
-        </div>
+        </div> :
+          <div className="flex flex-col gap-[20px]">
+            {links.map((linkItem, id) => (
+              <LinkListItem key={id} item={linkItem} />
+            ))}
+          </div>}
+
 
       </div>
     </div>

@@ -14,7 +14,7 @@ type FormState = {
 
 const Profile: React.FC<Props> = (props: Props) => {
 
-  const { currentUser, updateUserProfile } = useAuth();
+  const { currentUser, updateUserProfile, uploadImage } = useAuth();
 
   const [form, setForm] = useState<FormState>({
     firstName: currentUser?.displayName?.split(' ')[0] || '',
@@ -34,12 +34,11 @@ const Profile: React.FC<Props> = (props: Props) => {
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      const selectedFile = e.target.files[0];
-      console.log('selectedFile', selectedFile)
-      setImageUrl(URL.createObjectURL(selectedFile));
+        const selectedFile = e.target.files[0];
+        setImageUrl(URL.createObjectURL(selectedFile));
+        uploadImage(selectedFile); // Upload image
     }
-    console.log('imageUrl', imageUrl)
-  };
+};
 
   const handleSubmit = async () => {
     const submitForm = {
@@ -78,26 +77,27 @@ const Profile: React.FC<Props> = (props: Props) => {
                   <input
                     type="file"
                     id="image-upload"
+                    accept="image/png, image/webp, image/jpeg, image/jpg, image/gif"
                     onChange={handleImageChange}
                     className="hidden"
                   />
                 </div>
               </div>
               : <div className="rounded-[12px] bg-primary-100 w-[193px] h-[193px] bg-opacity-50 flex justify-center items-center">
-              <div className="flex flex-col items-center gap-[8px]">
-                <label htmlFor="image-upload" className="cursor-pointer flex flex-col items-center gap-[20px]">
-                  <ImageIcon className="text-primary-default"/>
-                  <p className="text-body-m font-[600] text-primary-default">+ Upload Image</p>
-                </label>
-                <input
-                  type="file"
-                  accept="image/*"
-                  id="image-upload"
-                  onChange={handleImageChange}
-                  className="hidden"
-                />
-              </div>
-            </div>}
+                <div className="flex flex-col items-center gap-[8px]">
+                  <label htmlFor="image-upload" className="cursor-pointer flex flex-col items-center gap-[20px]">
+                    <ImageIcon className="text-primary-default" />
+                    <p className="text-body-m font-[600] text-primary-default">+ Upload Image</p>
+                  </label>
+                  <input
+                    type="file"
+                    accept="image/png, image/webp, image/jpeg, image/jpg, image/gif"
+                    id="image-upload"
+                    onChange={handleImageChange}
+                    className="hidden"
+                  />
+                </div>
+              </div>}
 
             <div className="flex-[4] flex items-center justify-start p-[24px] pl-0 sm:pl-[24px]">
               <p className="text-body-s text-grey-300">Image must be below 1024x1024px. Use PNG or JPG format.</p>
