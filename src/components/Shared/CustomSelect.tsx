@@ -1,18 +1,4 @@
 import React, { useState, ChangeEvent, useEffect, useRef } from 'react';
-import Github from "../../../public/github.svg";
-import FrontendMentor from "../../../public/frontend-mentor.svg";
-import Twitter from "../../../public/twitch.svg";
-import Linkedin from "../../../public/linkedin.svg";
-import Youtube from "../../../public/youtube.svg";
-import Facebook from "../../../public/facebook.svg";
-import Twitch from "../../../public/twitch.svg";
-import DevTo from "../../../public/devto.svg";
-import CodeWars from "../../../public/codewars.svg";
-import CodePen from "../../../public/codepen.svg";
-import FreeCodeCamp from "../../../public/free-code-camp.svg";
-import Gitlab from "../../../public/gitlab.svg";
-import Hashnode from "../../../public/hashnode.svg";
-import StackOverflow from "../../../public/stack-overflow.svg";
 
 type Option = {
   name: string;
@@ -21,31 +7,14 @@ type Option = {
 
 type Props = {
   placeholder?: string;
-  Icon?: React.ElementType;
   onChange: (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
   error?: string;
   label?: string;
   inputType?: 'text' | 'password' | 'select';
+  options?: Array<Option>;
 };
 
-const options: Option[] = [
-  { name: "GitHub", icon: Github },
-  { name: "Frontend Mentor", icon: FrontendMentor },
-  { name: "Twitter", icon: Twitter },
-  { name: "LinkedIn", icon: Linkedin },
-  { name: "YouTube", icon: Youtube },
-  { name: "Facebook", icon: Facebook },
-  { name: "Twitch", icon: Twitch },
-  { name: "Dev.to", icon: DevTo },
-  { name: "Codewars", icon: CodeWars },
-  { name: "Codepen", icon: CodePen },
-  { name: "freeCodeCamp", icon: FreeCodeCamp },
-  { name: "GitLab", icon: Gitlab },
-  { name: "Hashnode", icon: Hashnode },
-  { name: "Stack Overflow", icon: StackOverflow },
-];
-
-const CustomSelect: React.FC<Props> = ({ placeholder, Icon, onChange, error, label, inputType }) => {
+const CustomSelect: React.FC<Props> = ({ placeholder, onChange, error, label, inputType, options = [] }) => {
   const [selectedOption, setSelectedOption] = useState<Option>(options[0]);
   const [isOpen, setIsOpen] = useState(false);
   const selectRef = useRef<HTMLDivElement>(null);
