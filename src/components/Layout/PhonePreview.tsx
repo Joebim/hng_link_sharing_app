@@ -3,14 +3,14 @@ import InnerFrame from "../../../public/frame-inner.svg"
 import OuterFrame from "../../../public/frame-outer.svg"
 import { useLinkContext } from '@/utils/context/LinkContext'
 import ArrowRight from "../../../public/arrow-right.svg"
+import { useAuth } from '@/utils/context/AuthContext'
 
 type Props = {}
 
 const PhonePreview = (props: Props) => {
 
     const link = useLinkContext()
-
-    console.log('link', link)
+    const currentUser = useAuth()
 
     return (
         <div className='relative h-[90vh] pt-[100px] w-full flex justify-center'>
@@ -20,12 +20,14 @@ const PhonePreview = (props: Props) => {
             <div className="absolute w-[280px] mt-[8px]">
                 <InnerFrame className="h-full w-full" preserveAspectRatio="xMinYMin" viewBox="0 0 286 612" />
             </div>
-            <div className=" w-[230px] p-[20px] pt-[70px] flex flex-col items-center gap-[56px] z-[100]">
+            <div className=" w-[230px] p-[20px] pt-[60px] flex flex-col items-center gap-[56px] z-[100]">
                 <div className="flex flex-col items-center gap-[25px]">
                     <div className="h-[96px] w-[96px] bg-[#eeeeee] rounded-full"></div>
                     <div className="flex flex-col gap-[13px] items-center">
-                        <div className="h-[16px] w-[160px] rounded-[104px] bg-[#eeeeee]"></div>
-                        <div className="h-[8px] w-[72px] rounded-[104px] bg-[#eeeeee]"></div>
+                        {currentUser?.currentUser?.displayName ? <h1 className="text-[18px] text-grey-300 font-[600]">{currentUser?.currentUser?.displayName}</h1> : <div className="h-[16px] w-[160px] rounded-[104px] bg-[#eeeeee]"></div>}
+                        
+                        {currentUser?.currentUser?.email ? <h1 className="text-[14px] text-grey-300">{currentUser?.currentUser?.email}</h1> : <div className="h-[8px] w-[72px] rounded-[104px] bg-[#eeeeee]"></div>}
+                        
                     </div>
                 </div>
 

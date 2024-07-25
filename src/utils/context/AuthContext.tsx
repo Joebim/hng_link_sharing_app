@@ -2,14 +2,22 @@
 
 import React, { createContext, useContext, useEffect, useState, ReactNode, useRef } from 'react';
 import { auth } from '../firebase';
+import { updateProfile, updateEmail} from 'firebase/auth';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, User, UserCredential } from 'firebase/auth';
 
-type AuthContextType = {
+type UserProfile = {
+    email?: string;
+    displayName?: string;
+    photoURL?: string | null;
+  };
+
+  type AuthContextType = {
     currentUser: User | null;
     signup: (email: string, password: string) => Promise<UserCredential>;
     signin: (email: string, password: string) => Promise<UserCredential>;
     logOut: () => Promise<void>;
     isAuthenticated: boolean;
+    updateUserProfile: (profile: UserProfile) => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -43,6 +51,26 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
         return signOut(auth);
     };
 
+    const updateUserProfile = async (profile: UserProfile) => {
+        if (currentUser) {
+          try {
+            if (profile.displayName || profile.photoURL) {
+              await updateProfile(currentUser, {
+                displayName: profile.displayName,
+                photoURL: profile.photoURL,
+              });
+            }
+            if (profile.email) {
+              await updateEmail(currentUser, profile.email);
+            }
+            // Update the state with the new user info
+            setCurrentUser(auth.currentUser);
+          } catch (error) {
+            console.error("Error updating profile: ", error);
+          }
+        }
+      };
+
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             setCurrentUser(user);
@@ -60,7 +88,8 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
         signin,
         logOut,
         isAuthenticated,
-        userInfo
+        userInfo,
+        updateUserProfile
     };
 
     return (
