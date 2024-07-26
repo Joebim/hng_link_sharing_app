@@ -109,6 +109,11 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
                 position: "bottom-center",
                 style: { background: "#333333", color: "#ffffff", border: "none", boxShadow: "none" }
             });
+            const unsubscribe = onAuthStateChanged(auth, (user) => {
+                setCurrentUser(user);
+                setLoading(false);
+            });
+            unsubscribe();
             return userCredential;
         } catch (error) {
             handleAuthError(error);
@@ -153,7 +158,7 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
         }
     };
 
-   
+
 
     const isAuthenticated = !!currentUser;
 
