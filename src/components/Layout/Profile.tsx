@@ -3,7 +3,6 @@ import Button from '../Shared/Button';
 import ImageIcon from "../../../public/image.svg";
 import InputField from '../Shared/InputField';
 import { useAuth } from '@/utils/context/AuthContext';
-import Image from 'next/image';
 
 type Props = {};
 
@@ -73,7 +72,7 @@ const Profile: React.FC<Props> = (props: Props) => {
             {currentUser?.photoURL ?
               <div className="relative rounded-[12px] overflow-hidden bg-dark w-[193px] h-[193px] bg-opacity-50 flex justify-center bg-cover bg-center bg-no-repeat items-center">
                 <div className="absolute w-[193px] h-[193px] bg-black ">
-                  <Image
+                  <img
                     src={currentUser?.photoURL}
                     alt="Profile Image"
                     height={193}
