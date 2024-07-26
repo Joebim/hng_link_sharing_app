@@ -4,6 +4,7 @@ import "./globals.css";
 import { AuthProvider } from "@/utils/context/AuthContext";
 import { LinkProvider } from "@/utils/context/LinkContext";
 import { ImageUploadProvider } from "@/utils/ImageUploadContext";
+import { ToastContainer } from 'react-toastify';
 
 const instrumentSans = Instrument_Sans({
   subsets: ["latin"],
@@ -24,6 +25,7 @@ export default function RootLayout({
 
     <html lang="en">
       <body className={instrumentSans.className}>
+        <ToastContainer/>
         <ImageUploadProvider>
           <AuthProvider>
             <LinkProvider>

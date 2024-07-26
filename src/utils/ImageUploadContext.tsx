@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { auth, storage } from './firebase';
 import { getDownloadURL, ref, uploadBytesResumable, TaskState } from 'firebase/storage';
@@ -152,7 +152,6 @@ export const ImageUploadProvider: React.FC<Props> = ({ children }) => {
     return (
         <ImageUploadContext.Provider value={{ uploadImage, uploadStatus }}>
             {children}
-            <ToastContainer/>
         </ImageUploadContext.Provider>
     );
 };
