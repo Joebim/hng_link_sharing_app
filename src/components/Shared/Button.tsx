@@ -2,7 +2,7 @@ import React from 'react';
 
 type Props = {
   type?: 'submit' | 'reset' | 'button' | undefined;
-  onClick?: React.MouseEventHandler<HTMLButtonElement>; // Optional click handler
+  onClick?: React.MouseEventHandler<HTMLButtonElement>; 
   disabled?: boolean;
   variant?: 'primary' | 'secondary';
   children: React.ReactNode;

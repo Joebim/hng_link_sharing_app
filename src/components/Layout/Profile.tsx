@@ -3,6 +3,7 @@ import Button from '../Shared/Button';
 import ImageIcon from "../../../public/image.svg";
 import InputField from '../Shared/InputField';
 import { useAuth } from '@/utils/context/AuthContext';
+import Image from 'next/image';
 
 type Props = {};
 
@@ -14,7 +15,8 @@ type FormState = {
 
 const Profile: React.FC<Props> = (props: Props) => {
 
-  const { currentUser, updateUserProfile, uploadImage } = useAuth();
+  const { currentUser, updateUserProfile, uploadImage, logOut } = useAuth();
+
 
   const [form, setForm] = useState<FormState>({
     firstName: currentUser?.displayName?.split(' ')[0] || '',
@@ -34,11 +36,11 @@ const Profile: React.FC<Props> = (props: Props) => {
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-        const selectedFile = e.target.files[0];
-        setImageUrl(URL.createObjectURL(selectedFile));
-        uploadImage(selectedFile); // Upload image
+      const selectedFile = e.target.files[0];
+      setImageUrl(URL.createObjectURL(selectedFile));
+      uploadImage(selectedFile);
     }
-};
+  };
 
   const handleSubmit = async () => {
     const submitForm = {
@@ -53,7 +55,6 @@ const Profile: React.FC<Props> = (props: Props) => {
     }
   };
 
-  console.log('currentUser.photoUrl', currentUser?.photoURL)
 
   return (
     <div className="sm:p-0 p-[20px] ">
@@ -70,20 +71,32 @@ const Profile: React.FC<Props> = (props: Props) => {
               <p className="text-body-m text-grey-300">Profile picture</p>
             </div>
             {currentUser?.photoURL ?
-              <div className="rounded-[12px] bg-dark w-[193px] h-[193px] bg-opacity-50 flex justify-center bg-cover bg-center bg-no-repeat items-center"
-              style={{ backgroundImage: currentUser?.photoURL ? `url(${currentUser.photoURL})` : 'none' }}              >
-                <div className="flex flex-col items-center gap-[8px]">
-                  <label htmlFor="image-upload" className="cursor-pointer flex flex-col items-center gap-[20px]">
-                    <ImageIcon />
-                    <p className="text-body-m font-[600] text-white">Change Image</p>
-                  </label>
-                  <input
-                    type="file"
-                    id="image-upload"
-                    accept="image/png, image/webp, image/jpeg, image/jpg, image/gif"
-                    onChange={handleImageChange}
-                    className="hidden"
+              <div className="relative rounded-[12px] overflow-hidden bg-dark w-[193px] h-[193px] bg-opacity-50 flex justify-center bg-cover bg-center bg-no-repeat items-center">
+                <div className="absolute w-[193px] h-[193px] bg-black ">
+                  <Image
+                    src={currentUser?.photoURL}
+                    alt="Profile Image"
+                    height={193}
+                    width={193}
+                    className="rounded-[12px] w-[193px] h-[193px] opacity-50  object-cover"
                   />
+                </div>
+
+                <div className="flex justify-center items-center z-[100] h-full w-full">
+                  <div className="flex flex-col items-center gap-[8px] ">
+                    <label htmlFor="image-upload" className="cursor-pointer flex flex-col items-center gap-[20px]">
+                      <ImageIcon className="text-white" />
+                      <p className="text-body-m font-[600] text-white">Change Image</p>
+                    </label>
+                    <input
+                      type="file"
+                      id="image-upload"
+                      accept="image/png, image/webp, image/jpeg, image/jpg, image/gif"
+                      onChange={handleImageChange}
+                      className="hidden"
+                    />
+                  </div>
+
                 </div>
               </div>
               : <div className="rounded-[12px] bg-primary-100 w-[193px] h-[193px] bg-opacity-50 flex justify-center items-center">
@@ -144,7 +157,14 @@ const Profile: React.FC<Props> = (props: Props) => {
         </div>
 
         <hr />
-        <div className="w-full p-[20px] sm:p-[40px] flex justify-end">
+        <div className="w-full p-[20px] sm:p-[40px] flex justify-between">
+          <Button
+            onClick={logOut}
+            disabled={false}
+            variant="secondary"
+          >
+            Sign Out
+          </Button>
           <Button
             onClick={handleSubmit}
             disabled={false}

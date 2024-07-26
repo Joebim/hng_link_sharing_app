@@ -41,7 +41,6 @@ const Login: React.FC<Props> = () => {
   const handleLogin = async (e: FormEvent) => {
     e.preventDefault();
 
-    // Validate email
     if (!form.email) {
       setEmailError("Email can't be empty");
       return;

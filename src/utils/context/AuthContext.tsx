@@ -39,7 +39,7 @@ type Props = {
 export const AuthProvider: React.FC<Props> = ({ children }) => {
     const [currentUser, setCurrentUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
-    const { uploadImage } = useImageUpload(); // Use the image upload function
+    const { uploadImage } = useImageUpload();
 
     const signup = (email: string, password: string) => {
         return createUserWithEmailAndPassword(auth, email, password);
@@ -90,7 +90,7 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
         logOut,
         isAuthenticated,
         updateUserProfile,
-        uploadImage, // Provide the uploadImage function
+        uploadImage,
     };
 
     return (

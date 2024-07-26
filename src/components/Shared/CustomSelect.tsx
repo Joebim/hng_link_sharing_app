@@ -1,4 +1,6 @@
 import React, { useState, ChangeEvent, useEffect, useRef } from 'react';
+import { options } from '@/utils/icons';
+import ArrowDown from "../../../public/arrow-down.svg"
 
 type Option = {
   name: string;
@@ -11,10 +13,9 @@ type Props = {
   error?: string;
   label?: string;
   inputType?: 'text' | 'password' | 'select';
-  options?: Array<Option>;
 };
 
-const CustomSelect: React.FC<Props> = ({ placeholder, onChange, error, label, inputType, options = [] }) => {
+const CustomSelect: React.FC<Props> = ({ placeholder, onChange, error, label, inputType }) => {
   const [selectedOption, setSelectedOption] = useState<Option>(options[0]);
   const [isOpen, setIsOpen] = useState(false);
   const selectRef = useRef<HTMLDivElement>(null);
@@ -42,13 +43,16 @@ const CustomSelect: React.FC<Props> = ({ placeholder, onChange, error, label, in
     <div className="relative" ref={selectRef}>
       <label htmlFor={label} className='text-body-s text-dark'>{label}</label>
       <div
-        className={`flex items-center gap-4 bg-white border rounded-lg px-4 py-2 cursor-pointer ${isOpen ? "border-primary-default shadow-custom-purple" : ""}`}
+        className={`flex items-center justify-between bg-white border rounded-lg px-4 py-2 cursor-pointer ${isOpen ? "border-primary-default shadow-custom-purple" : ""}`}
         onClick={() => setIsOpen(!isOpen)}
       >
         {selectedOption ? (
           <>
+          <div className="flex flex-row gap-4">
             <selectedOption.icon className="text-grey-300" />
             <span>{selectedOption.name}</span>
+          </div>
+            <ArrowDown className={`text-primary-default duration-300 ${isOpen ? "-rotate-180" : "rotate-0"}`}/>
           </>
         ) : (
           <span>{placeholder}</span>

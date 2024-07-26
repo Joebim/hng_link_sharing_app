@@ -2,8 +2,8 @@ import React, { ChangeEvent, useState } from 'react';
 
 type Props = {
     placeholder?: string;
-    Icon?: React.ElementType;  // Accepts a React component type for the icon
-    onChange: (event: ChangeEvent<HTMLInputElement>) => void;  // Event handler for input change
+    Icon?: string | React.ElementType; 
+    onChange: (event: ChangeEvent<HTMLInputElement>) => void; 
     error?: string;
     label?: string;
     inputType?: string;

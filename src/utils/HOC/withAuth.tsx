@@ -18,7 +18,7 @@ const withAuth = <P extends object>(WrappedComponent: React.ComponentType<P>): R
     }, [isAuthenticated, router]);
 
     if (!isAuthenticated) {
-      return null; // or a loading spinner
+      return null;
     }
 
     return <WrappedComponent {...(props as P)} />;

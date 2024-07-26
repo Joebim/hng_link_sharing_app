@@ -5,7 +5,6 @@ import Profile from './Profile';
 import CustomiseLinks from './CustomiseLinks';
 import NavTab from '../Shared/NavTab';
 import PhonePreview from './PhonePreview';
-import { useAuth } from '@/utils/context/AuthContext';
 
 type Props = {
 
@@ -13,10 +12,6 @@ type Props = {
 
 const MainLayout: React.FC<Props> = () => {
     const [tab, setTab] = useState<string>("customize");
-
-    const currentUser = useAuth()
-
-    console.log('currentUser', currentUser)
 
     return (
         <div className="min-h-screen gap-[24px] p-0 sm:p-[24px] flex flex-col">

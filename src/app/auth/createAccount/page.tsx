@@ -66,7 +66,6 @@ const CreateAccount: React.FC<Props> = () => {
       return;
     }
 
-    // Validate confirm password
     if (form.password !== form.confirmPassword) {
       setConfirmPasswordError("Passwords do not match");
       return;

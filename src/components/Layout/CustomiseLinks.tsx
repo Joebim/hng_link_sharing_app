@@ -5,7 +5,8 @@ import LinkCard from '../Shared/LinkCard';
 import { useLinkContext } from '@/utils/context/LinkContext';
 
 const CustomiseLinks = () => {
-  const { links, addLink } = useLinkContext();
+  const { links, addLink ,saveLinks } = useLinkContext();
+
 
   return (
     <div className='sm:p-0 p-[20px] '>
@@ -24,7 +25,7 @@ const CustomiseLinks = () => {
           </Button>
         </div>
 
-        {links.length === 0 ? (
+        {links?.length === 0 ? (
           <div className="py-[80px] px-[22px] flex flex-col items-center gap-[40px] rounded-[12px] bg-grey-100">
             <HandClickStart />
             <div className="flex flex-col items-center gap-[24px]">
@@ -35,7 +36,7 @@ const CustomiseLinks = () => {
             </div>
           </div>
         ) : (
-          links.map((link) => (
+          links?.map((link) => (
             <LinkCard key={link.id} link={link} />
           ))
         )}
@@ -43,7 +44,7 @@ const CustomiseLinks = () => {
       <hr />
       <div className="p-[40px] flex justify-end bg-white sm:bg-transparent rounded-b-[12px] sm:rounded-b-none">
         <Button
-          onClick={() => console.log("clicked")}
+          onClick={() => saveLinks()}
           disabled={false}
           variant="primary"
         >
