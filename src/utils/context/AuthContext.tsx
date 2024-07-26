@@ -105,15 +105,16 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
     const signin = async (email: string, password: string) => {
         try {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
-            toast.success('Sign in successful!', {
-                position: "bottom-center",
-                style: { background: "#333333", color: "#ffffff", border: "none", boxShadow: "none" }
-            });
             const unsubscribe = onAuthStateChanged(auth, (user) => {
                 setCurrentUser(user);
                 setLoading(false);
             });
-            unsubscribe();
+            () => unsubscribe();
+
+            toast.success('Sign in successful!', {
+                position: "bottom-center",
+                style: { background: "#333333", color: "#ffffff", border: "none", boxShadow: "none" }
+            });
             return userCredential;
         } catch (error) {
             handleAuthError(error);
