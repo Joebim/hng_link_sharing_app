@@ -1,6 +1,8 @@
-"use client"
+"use client";
 
 import React, { createContext, useContext, useState, ReactNode } from 'react';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { auth, storage } from './firebase';
 import { getDownloadURL, ref, uploadBytesResumable, TaskState } from 'firebase/storage';
 import { updateProfile } from 'firebase/auth';
@@ -49,6 +51,10 @@ export const ImageUploadProvider: React.FC<Props> = ({ children }) => {
                 error: 'Not logged in!',
                 downloadURL: null
             });
+            toast.error('Not logged in!', {
+                position: "bottom-center",
+                style: { background: "#FF3939", color: "#ffffff", border: "none", boxShadow: "none" }
+            });
             return;
         }
 
@@ -60,6 +66,10 @@ export const ImageUploadProvider: React.FC<Props> = ({ children }) => {
                 state: null,
                 error: 'Image size must be less than 1MB!',
                 downloadURL: null
+            });
+            toast.error('Image size must be less than 1MB!', {
+                position: "bottom-center",
+                style: { background: "#FF3939", color: "#ffffff", border: "none", boxShadow: "none" }
             });
             return;
         }
@@ -86,6 +96,10 @@ export const ImageUploadProvider: React.FC<Props> = ({ children }) => {
                     error: error.message,
                     downloadURL: null
                 });
+                toast.error(error.message, {
+                    position: "bottom-center",
+                    style: { background: "#FF3939", color: "#ffffff", border: "none", boxShadow: "none" }
+                });
             },
             () => {
                 getDownloadURL(uploadTask.snapshot.ref)
@@ -96,6 +110,10 @@ export const ImageUploadProvider: React.FC<Props> = ({ children }) => {
                                 state: 'error',
                                 error: 'User is not authenticated!',
                                 downloadURL: null
+                            });
+                            toast.error('User is not authenticated!', {
+                                position: "bottom-center",
+                                style: { background: "#FF3939", color: "#ffffff", border: "none", boxShadow: "none" }
                             });
                             return;
                         }
@@ -110,12 +128,20 @@ export const ImageUploadProvider: React.FC<Props> = ({ children }) => {
                                 error: null,
                                 downloadURL
                             });
+                            toast.success('Image uploaded successfully!', {
+                                position: "bottom-center",
+                                style: { background: "#333333", color: "#ffffff", border: "none", boxShadow: "none" }
+                            });
                         }).catch((error) => {
                             setUploadStatus({
                                 progress: null,
                                 state: 'error',
                                 error: error.message,
                                 downloadURL: null
+                            });
+                            toast.error(error.message, {
+                                position: "bottom-center",
+                                style: { background: "#FF3939", color: "#ffffff", border: "none", boxShadow: "none" }
                             });
                         });
                     });
@@ -126,6 +152,7 @@ export const ImageUploadProvider: React.FC<Props> = ({ children }) => {
     return (
         <ImageUploadContext.Provider value={{ uploadImage, uploadStatus }}>
             {children}
+            <ToastContainer/>
         </ImageUploadContext.Provider>
     );
 };

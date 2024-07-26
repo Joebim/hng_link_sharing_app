@@ -1,11 +1,12 @@
-"use client"
+"use client";
 
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import LinkIcon from "../../../public/link.svg";
-import { db } from '../firebase'; 
+import { db, auth } from '../firebase';
 import { collection, doc, runTransaction, getDocs, setDoc, deleteDoc } from 'firebase/firestore';
 import { Link } from '../types/types';
-
 
 type LinkContextType = {
   links: Link[];
@@ -22,13 +23,17 @@ export const LinkProvider = ({ children }: { children: ReactNode }) => {
   const [links, setLinks] = useState<Link[]>([]);
 
   const loadLinks = async () => {
-    const querySnapshot = await getDocs(collection(db, 'links'));
+    const uid = auth.currentUser?.uid;
+    if (!uid) {
+      return;
+    }
+    const querySnapshot = await getDocs(collection(db, 'users', uid, 'links'));
     const loadedLinks = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Link));
     setLinks(loadedLinks);
   };
 
   useEffect(() => {
-    loadLinks(); 
+    loadLinks();
   }, []);
 
   const addLink = () => {
@@ -37,8 +42,28 @@ export const LinkProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const removeLink = async (id: string) => {
-    setLinks(links?.filter(link => link.id !== id));
-    await deleteDoc(doc(db, 'links', id));
+    const uid = auth.currentUser?.uid;
+    if (!uid) {
+      toast.error('User not authenticated', {
+        position: "bottom-center",
+        style: { background: "#FF3939", color: "#ffffff", border: "none", boxShadow: "none" }
+      });
+      return;
+    }
+
+    try {
+      setLinks(links?.filter(link => link.id !== id));
+      await deleteDoc(doc(db, 'users', uid, 'links', id));
+      toast.success('Link removed successfully', {
+        position: "bottom-center",
+        style: { background: "#333333", color: "#ffffff", border: "none", boxShadow: "none" }
+      });
+    } catch (error) {
+      toast.error('Failed to remove link', {
+        position: "bottom-center",
+        style: { background: "#FF3939", color: "#ffffff", border: "none", boxShadow: "none" }
+      });
+    }
   };
 
   const updateLink = (id: string, updatedLink: Link) => {
@@ -46,9 +71,18 @@ export const LinkProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const saveLinks = async () => {
+    const uid = auth.currentUser?.uid;
+    if (!uid) {
+      toast.error('User not authenticated', {
+        position: "bottom-center",
+        style: { background: "#FF3939", color: "#ffffff", border: "none", boxShadow: "none" }
+      });
+      return;
+    }
+
     try {
       await runTransaction(db, async (transaction) => {
-        const linksRef = collection(db, 'links');
+        const linksRef = collection(db, 'users', uid, 'links');
         const existingLinksSnapshot = await getDocs(linksRef);
 
         existingLinksSnapshot.docs.forEach(doc => {
@@ -60,22 +94,20 @@ export const LinkProvider = ({ children }: { children: ReactNode }) => {
           transaction.set(linkRef, link);
         });
       });
-      console.log('Transaction successfully committed!');
+      toast.success('Links saved successfully', {
+        position: "bottom-center",
+        style: { background: "#333333", color: "#ffffff", border: "none", boxShadow: "none" }
+      });
     } catch (error) {
-      console.error('Transaction failed: ', error);
+      toast.error('Transaction failed', {
+        position: "bottom-center",
+        style: { background: "#FF3939", color: "#ffffff", border: "none", boxShadow: "none" }
+      });
     }
   };
 
   return (
-    <LinkContext.Provider 
-    value={{ 
-      links, 
-      addLink, 
-      removeLink, 
-      updateLink, 
-      saveLinks, 
-      loadLinks 
-      }}>
+    <LinkContext.Provider value={{ links, addLink, removeLink, updateLink, saveLinks, loadLinks }}>
       {children}
     </LinkContext.Provider>
   );
