@@ -61,7 +61,7 @@ const Preview = (props: Props) => {
       <div className="absolute rounded-[24px] bg-white w-[349px] p-[20px] py-[40px] flex flex-col items-center gap-[56px] z-[100]">
         <div className="flex flex-col items-center gap-[25px]">
           <div className="h-[96px] w-[96px] bg-[#eeeeee] rounded-full border-[4px] border-solid border-primary-default overflow-hidden">
-            <Image
+            <img
               src={imageUrl}
               alt="Profile Image"
               height={92}
